@@ -1,0 +1,53 @@
+■ 0. 개요
+
+◎ 참조
+  - <link path="https://mug896.github.io/bash-shell/basics.html" contents="Basics"/>
+  - <link path="https://bangu4.tistory.com/m/242" contents="Bash Shell 설정과 문법 정리"/>
+  - <link path="https://twpower.github.io/131-simple-shell-script-syntax" contents="간단한 쉘 스크립트 문법 정리와 예제"/>
+  
+◎ 기본
+  - 쉘의 기본적인 역할은 사용자에게 명령을 입력받아 실행하는 것이다.
+  - 쉘은 여러가지 기능(brace, quote, 산술연산, 명령치환 등)을 제공하며 이를 사용해 명령문을 다양하게 작성할 수 있다.
+  - 명령문의 기본적인 구조는 다음과 같다.
+    - command arg1 arg2 arg3 ...
+    - 명령어/인자를 구분하는 기준은 공백문자이다. 
+      - 정확히는 $IFS(Internal Field Seperator) 변수로 정해진다.
+  - 쉘 스크립트는 프로그래밍 언어로 변수, 함수, 제어문(if, case, for 등)을 가지고 있다.
+  - 쉘 스크립트의 변수는 $로 참조한다.
+
+◎ 쉘 종류
+  - 1. Bourne Shell (sh)
+    - Bourne Shell은 1974년 Stephen Bourne이 개발하였고 최초의 쉘(Shell)이다. 리눅스 대부분에 기본적으로 설치가 되어있다. 설치 위치는 '/bin/sh'이다.
+  - 2. C Shell (csh)
+    - C Shell은 1978년 Bill Joy가 개발한 쉘이다. csh는 sh보다 사용성을 높이고 한층 강력하게 만들어졌다. C언어를 기반으로 만들었으며 강력한 프로그램 작성 기능을 지녔다. 설치 위치는 '/bin/csh'이다.
+  - 3. tee-see-Shell (tcsh)
+    - tee-see-Shell은 Carnegie Mellon University의 학생들이 개발해 1983년 소스코드를 게시하였다. 간단하게 설명하면, csh에 명령행 완성과 명령행 편집 기능을 추가한 것이다. 초기 맥 OS X는 tcsh를 기본 쉘로 포함하고 있었다. 설치 위치는 '/bin/tcsh'이다.
+  - 4. Z Shell (zsh)
+    - Z Shell은 Paul Falstad가 1990년 대학교에 재학 중일 때 첫 버전을 작성하였다. Z Shell은 지금까지의 수많은 쉘의 기능을 가지고 있으며, 많이 개선된 확장형 sh이다. 설치 위치는 '/bin/zsh'이다.
+  - 5. Bourne-again shell (bash)
+    - Boure-again shell은 지금 현 시대에 가장 많이 쓰이는 Shell이다. 줄여서 bash 쉘은 GNU 프로젝트를 위해 Brian Fox가 작성한 쉘이다. GUN 운영체제와 리눅스, 맥 등 기본 쉘로 채택되어 있다. csh과 sh의 기능을 많이 포함하고 있다. 자료가 방대하고 배우기 쉽고 강력하다. 설치 위치는 '/bin/bash'이다.
+  - 6. etc
+    - 이외에도 많은 쉘이 존재한다 
+
+◎ 쉘 관련 명령어
+  - 현재 설치된 쉘 확인
+    - cat /etc/shells
+    - chsh -l
+  - 현재 지정된 쉘 확인
+    - echo $SHELL
+    - grep {userid} /etc/passwd
+  - 쉘 변경
+    - bash/sh/zsh
+  - 설정한 쉘 종류 변경
+    - usermod -s /bin/ksh {username}
+    - chsh -s /bin/ks
+
+◎ 쉘 스크립트 실행
+  - 파일 생성: touch shell_script_practice.sh
+  - 실행 권한 부여: chmod +x shell_script_practice.sh
+
+  - sh {script}: 자식 쉘을 만든 다음 쉘 스크립트 실행
+    - 여기서 sh는 Bourne Shell의 sh이다. sh를 zsh나 bash로 바꿀 수가 있다.
+  - source {script}: 현재 쉘에서 쉘 스크립트 실행
+  - . {script}: source 명령어와 동일
+  - {script}: sh 명령어와 동일, shebang이 있어야 실행가능하다

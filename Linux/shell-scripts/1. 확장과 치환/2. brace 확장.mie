@@ -1,0 +1,32 @@
+■ brace 확장
+
+◎ 참조
+  - <link path="https://mug896.github.io/bash-shell/exp_and_sub/brace_expansion.html" contents="Brace Expansion"/>
+
+◎ 개요
+  - {...}
+  - brace 확장은 여러 확장과 치환 중에서 가장 먼저 일어나는 작업이다.
+  - brace 확장은 따옴표를 사용하면 일어나지 않는다.
+  - brace 확장은 sh에서는 사용할 수 없다.
+
+◎ 문자열 brace 확장
+  - {string1,string2,...,stringN}
+    -> string1 string2 ... stringN
+  - 문자열 brace 확장은 문자열을 나열하는 기능을 한다.
+  - 단일 원소는 확장되지 않으며, ','의 앞뒤에 공백이 들어가지 않아야 한다.
+  - 원소에는 따옴표를 사용할 수 있으며 빈 문자열이 들어가도 된다.
+
+◎ 범위 brace 확장
+  - {start...end[...step]}
+    -> start+step ... start+step*2 ... end
+  - 범위 brace 확장은 숫자를 나열하는 기능을 한다.
+  - step의 기본값은 1이다.
+  - start와 end의 값으로 문자를 사용할 수도 있다. (숫자와 문자를 혼용하진 못한다.)
+  - 숫자에 0을 붙여 패딩을 줄 수 있다.
+
+◎ 활용
+  - brace 확장의 앞뒤에 문자열을 붙이면 해당 확장의 원소를 포함하는 문자열로 불어난다.
+  - brace 확장은 한 행에 여럿 사용할 수 있다.
+  - 복수 개의 brace 확장을 이어쓸 수도 있다. {} 안에 brace 확장을 ','로 구분해서 나열하면 brace 확장을 연속해서 쓸 수 있다.
+  - 범위의 값으로 변수를 사용하려면 eval 명령을 사용하면 된다.
+  - brace 확장을 사용하면 동일한 명령을 인수를 바꿔가며 여러번 실행시킬 수 있다.

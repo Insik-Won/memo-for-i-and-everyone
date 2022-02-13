@@ -1,5 +1,9 @@
 ■ 0. Vim이란
 
+◎ 전체 참조
+  - <link path="http://www.viemu.com/a_vi_vim_graphical_cheat_sheet_tutorial.html"/>
+  - <code type="vim" contents=":help usr_toc | only"/>
+
 ◎ Vim
   - Vim은 Unix의 무료 오픈소스 콘솔 UI 기반 텍스트 편집 프로그램이다. 
   - Vim은 Bram Moolenaar가 1991년 11월 2일에 Amiga용으로 포팅한 Stevie 편집기에서 출발해 출시했다.

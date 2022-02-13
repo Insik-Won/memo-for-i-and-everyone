@@ -1,0 +1,11 @@
+■ tilde 확장
+
+◎ 참조
+  - <link path="https://mug896.github.io/bash-shell/exp_and_sub/tilde_expansion.html" contents="Tilde Expansion"/>
+
+◎ 설명
+  - '~' 문자를 이용해 디렉토리 정보를 표시한다. 쌍따옴표 내에서 확장되지 않다.
+  - ~는 현재 사용자의 홈 디렉토리를 나타내며 $HOME 변수값과 같다.
+  - ~USERID는 USERID의 홈 디렉토리를 나타낸다.
+  - ~+는 현재 디렉토리를 나타내며 $PWD 변수값과 같다. (bash 전용)
+  - ~-는 이전 디렉토리를 나타내며 $OLDPWD 변수값과 같다. (bash 전용)

@@ -1,0 +1,66 @@
+■ 디버깅
+
+◎ 참조
+  - <link contents="Debugging" path="https://mug896.github.io/bash-shell/debugging.html"/>
+
+◎ 오류 메세지 작성 시 $LINENO 변수의 활용
+  - 오류 메세지 작성 시 $LINENO 변수를 활용하면 오류가 발생한 위치를 알 수 있다.
+  - <code name="예시" type="shell">
+    #!/bin/bash
+
+    error () {
+        echo "ERROR: line $1: exit $2: $3"
+        exit $2
+    } >&2
+
+    echo start .....
+    # asdfgh 는 존재하지 않는 디렉토리
+    cd asdfgh 2> /dev/null || { error $LINENO $? "cd $_" ;}
+
+    echo end....
+    -------------------------------------------------
+
+    $ ./test.sh
+    start .....
+    ERROR: line 14: exit 1: cd asdfgh
+  - </code>
+  
+◎ 구문 검사
+  - -n, set -o noexec 옵션은 명령 실행을 하지 않아 구문 오류를 검사하는 용도로 사용할 수 있다.
+  - 단 구문 오류만 검사하고 명령 이름에 오타가 있는지, 명령 사용에 오류가 있는 지는 각 명령에 해당하는 것이므로 검사하지 않는다.
+
+◎ 존재하지 않는 변수 사용 시 스크립트 종료
+  - -u, set -o nounset 옵션은 존재하지 않는 변수를 사용할 경우 에러로 간주해 exit한다.
+
+◎ 오류 발생 시 스크립트 종료
+  - -e, set -o errexit 옵션은 스크립트 실행 중 어떤 명령이 오류로 종료할 경우 자동으로 스크립트가 종료된다.
+  - 오류가 나는 명령이 &&, ||, if, while과 같은 분기문의 조건으로 사용되는 경우는 예외로 한다.
+  - 리디렉션이 { ;}나 복합문의 키워드에 연결되어 사용될 경우, 리디렉션 처리에 오류가 발생해도 종료되지 않는다. 이때는 뒤에 || exit을 붙여주어야 한다.
+  - 명령 치환에서 생기는 하위쉘에는 적용되지 않는다.
+  - 산술 연산에서 연산 결과가 0(false)이면 종료 상태로 1을 반환하니 주의해야 한다.
+
+◎ ERR trap
+  - errexit 옵션의 경우 오류가 발생하면 바로 스크립트가 종료되지만, ERR trap을 사용하면 필요한 뒤처리 작업을 설정하거나 오류와 관련한 메세지를 출력할 수 있다.
+  - BASH_SOURCE, LINENO, BASH_COMMAND 변수를 활용하면 오류가 발생한 명령과 위치를 알 수 있다.
+  - -E, set -o errtrace 옵션을 사용하면 하위쉘, 명령치환, 쉘 함수에서 발생한 오류도 ERR trap이 된다.
+  - 명령 치환은 명령 실행 전 명령문을 만드는데 사용되므로 명령 치환에서 발생한 오류는 오류로 취급되지 않는다. 그러나 대입 연산에서 사용될 경우 오류로 취급된다.
+
+◎ DEBUG trap
+  - DEBUG trap은 명령이 발생하기 전에 발생한다.
+  - -T, set -o functrace 옵션은 하위쉘, 명령치환, 쉘 함수에서도 DEBUG trap일 발생하게 할 수 있다.
+  - shopt -s extdebug 옵션을 사용하면 다음의 확장 기능을 사용할 수 있다.
+    - DEBUG trap 함수가 fasle를 반환하면 다음에 오는 명령을 스킵하고 실행하지 않는다.
+    - DEBUG trap 함수가 2를 반환하면 현재 실행중인 함수나 source한 스크립트에서 반환한다.
+    - declare -F 함수이름을 사용하면 해당 함수가 위치한 파일 이름과 라인 번호를 알려준다.
+    - BASH_ARGC, BASH_ARGV 값을 사용할 수 있다.
+
+◎ RETRUN trap
+  - RETURN trap은 기본적으로 source한 파일이 반환할 때 사용한다.
+  - 함수가 return할 때 발생하게 하려면 함수 안에서 RETURN trap을 선언하면 된다.
+  - -T, set -o functrace 옵션을 사용하면 함수 안에서도 모두 RETURN trap이 발생한다.
+
+◎ xtrace
+  - xtrace는 set -x, set -o xtrace 옵션으로 설정할 수 있고 set -, set +o xtrace로 해제할 수 있다.
+  - xtrace의 큰 장점은 변수확장, 명령치환, 산술확장이 완료된 명령문을 보여주고 실행한다는 점이다. 그러므로 명령 싫행시 변수갑셍 대한 정보를 알 수 있고, ':' 명령을 사용하면 인수 부분에서 필요한 연산 결과를 얻어낼 수 있다.
+  - xtrace를 할 떄 변수 이름 앞에 $ 문자가 없으면 값이 표시되지 않는다. 이때 값을 보기 위해 echo 명령을 사용하면 trace가 되기 때문에 보기가 안 좋은데, 이때 : 명령을 활용할 수 있다.
+  - xtrace은 프로그래밍 언어의 디버깅처럼 중단점을 설정하거나 명령을 하나씩 확인하고 실행시킬 수 있다.

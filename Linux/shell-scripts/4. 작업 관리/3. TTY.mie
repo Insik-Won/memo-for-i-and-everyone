@@ -1,0 +1,75 @@
+■ TTY
+
+◎ 참조
+  - <link contents="TTY" path="https://mug896.github.io/bash-shell/tty.html"/>
+
+◎ 개요
+  - 컴퓨터는 기본적으로 연산을 위한 입력장치와 출력장치를 가진다. 초기에는 대형 연산장치가 큰 방 하나를 가득 채우고, 입출력 장치가 따로 분리되어 운영되었었다.
+  - 리눅스의 /dev 디렉토리에 볼 수 있는 /dev/tty*, /dev/pts/* 류의 파일은 입출력과 관련된 파일이다. 주로 외부 터미널 장치 연결이나 리눅스 가상 콘솔 제공, 터미널 에뮬레이션 프로그램, 원격 로그인 프로그램(telnet, ssh)에 의해 사용된다.
+  - 초기에는 입출력 기기로 Teletypewriter를 사용했다. 입력으로 키보드, 출력으로 라인프린터를 가지고 있으며 통신회선이 연결되어 있었다. 문자를 치면 자동으로 전신 부호로 번역해 송신하고, 수신측에서 반대로 수신한 전신 부호를 문자로 변역해 출력한다. 컴퓨터에 연결되어 입출력에 사용되기도 했으며 command line interface의 원조라고 할 수 있다. 리눅스의 /dev 디렉토리에서 볼 수 있는 tty 파일의 이름은 이 TeleTYpe에서 유래한 것이다.
+
+◎ 입출력 장치 사용의 구분
+  - 1. 외부 터미널 장치 연결
+    - <img contents="외부 연결" path="./image/외부 터미널 장치.png"/>
+    - 외부 터미널 장치가 시리얼 라인을 통해 연결되는 경우이다. getty 프로세스가 백그라운드에서 라인을 모니터링 하고 있다가 터미널에서 접속하면 로그인 프롬프트를 보여준다. /dev/tty5[번호]파일이 사용된다.
+      - UART driver: 물리적으로 bytes를 전송하는 역할을 하며 parity checks나 flow control을 수행한다.
+      - Line discipline
+        - 터미널에서 텍스트를 입력할 때 한번에 오류 없이 입력할 수 없으므로 backspace, erase word, clear line, reprint 같은 줄 편집 기능을 standard line discipline을 통해 제공한다. (readline이나 curses 같은 고급 기능을 제공하는 프로그램은 raw 모드를 통해 직접 모든 기능을 제어한다.)
+        - low level 장치 드라이버 위에 line discipline이라는 레이어를 하나 더 두면 같은 장치를 여러 용도로 사용할 수 있다. 종단은 같은 /dev/ttyS* 시리얼 장치라 해도 PPP line discipline을 사용하면 PPP 패킷을 처리할 수 있고 SLIP line discipline을 사용하면 SLIP 패킷을 처리할 수 있다.
+      - TTY driver
+        - 세션 관리 기능, 즉 작업 관리와 관련한 기능을 제공한다. CTRL-Z로 실행 중지, CTRL-C로 종료, 사용자 입력은 포어그라운드 작업에만, 백그라운드 작업이 입력받으면 SIGTTIN 신호를 보내 중지시키는 등의 작업은 모두 TTY driver에서 제공한다.
+    - UART driver, Line discipline, TTY driver를 합쳐서 TTY device라고 한다.
+    
+  - 2. 리눅스 가상 콘솔(virtual console)
+    - <img contents="리눅스 가상 콘솔" path="./image/리눅스 가상 콘솔.png"/>
+    - Ctrl-Alt-F1 ~ F6 키조합으로 사용할 수 있는 OS에서 제공하는 가상 콘솔이다. 실제 물리적인 장치가 연결된 것이 아니기 때문에, 커널에서 터미널을 에뮬레이션한다. Line discipline, TTY driver의 기능은 위 이미지와 같이 백그라운드 getty 프로세스에 의해 login prompt가 제공된다. /dev/tty[번호]파일이 사용된다.
+  
+  - 3. 가상 TTY (xterm, gnome-terminal, telnet, ssh ...)
+    - <img contents="가상 TTY" path="./image/가상 TTY.png"/>
+    - 가상 콘솔은 커널에서 터미널을 에뮬레이션했다면, TTY driver가 제공하는 세션 관리 기능과 line discipine을 그대로 사용하면서, 사용자 프로그램에서 터미널을 예뮬레이션하는 것이 PTY(Pseudo TTY)이다.
+    - PTY는 master/slave pair로 이루어지는데 /dev/ptmx(pseudo-terminal master multiplexer) 파일을 open하면 PTM(pseudo terminal master)에 해당하는 파일 지시자가 반환되고 PTS(pseudo terminal slace)에 해당하는 장치가 /dev/pts 디렉토리에 생성된다. 일단 두 ptm과 pts가 open되면 /dev/pts/[번호]는 실제 터미널과 같은 인터페이스를 프로세스에 제공한다.
+      - xterm이나 gnome-terminal 같은 터미널을 예로 들면 xterm이 ptm에 연결되고 어플리케이션 프로세스(예를 들면 bash)가 pts에 연결되는 구조이다. xterm에서 사용자가 입력을 하면 ptm -> 커널의 line discipline -> pts를 거쳐 bash 프로세스에 전달되고, 명령 실행결과는 다시 pts -> line discipline -> ptm을 거쳐 sterm에 전달되면 xterm은 실제 터미널과 같이 화면을 표시한다. 일종의 두 프로세스 간의 IPC이고 중간에 커널의 tty driver, line discipline이 있다는 게 다르다.
+      - 현재 PTY를 사용 중인 프로세스는 fuser -v /dev/ptmx 명령을 통해 확인할 수 있다.
+      - telnet, ssh의 경우, telnet 명령이 stdin, stdout, stderr은 모두 터미널에 연결되어 있으므로 터미널에서 ls 명령을 실행하면 telnet 명령의 입력으로 들어가고 네트워크를 거쳐 telnetd에 전달되면 ptm, pts를 거쳐 bash 프로세스로 전달된다. 명령의 실행 결과는 다시 pts, ptm을 거쳐 telnetd에 전달되고 네트워크를 거쳐 telnet 명령에 전달되면 터미널로 출력한다.
+      - 터미널 프로그램을 실행하거나 외부에서 ssh client가 접속하면 /dev/pts 디렉토리에 device 파일이 새로 생성되는 것을 볼 수 있다.
+
+◎ Controlling Terminal
+  - Controlling Terminal은 session leader에 의해 할당되며, 보통 /dev/tty*나 /dev/pts* 같은 터미널 장치를 말한다.
+  - PID와 SID가 같은 프로세스를 session leader라고 하는데 오직 session leader만이 controlling terminal을 획득할 수 있다. session leader를 controlling process라고도 한다.
+  - 하나의 session은 하나의 controlling terminal만 가질 수 있다.
+  - 세션은 하나의 포어그라운드 프로세스 그룹과 여러개의 백그라운드 프로세스 그룹으로 구성된다.
+  - CTRL-C를 누르면 SIGINT 신호가 포어그라운드 프로세스 그룹에 전달된다.
+  - 모뎀/네트워크 연결이 끊기면 SIGHUP 신호가 session leader에 전달되고 session leader는 같은 SID를 갖는 프로세스들에게 전달한다.
+  - ps x 명령을 실행했을 때 두번째 TTY 열에 나오는 내용이 controlling terminal(ctty)이다. ctty를 갖지 않는 프로세스는 ?로 표시된다.
+
+◎ /dev/tty
+  - /dev/tty는 특수 파일로 프로세스의 controlling terminal과 동일하다. 다시 말해 ctty가 /dev/pts/12라면 /dev/tty도 /dev/pts/12와 같다고 할 수 있다.
+  - 다시 말해 어떤 프로세스가 /dev/tty를 open하는데 실패했다면 ctty를 갖고 있지 않다고 할 수 있다.
+  - 표준 스트림이 모두 리디렉션되어 있어도 /dev/tty로 입출력하면 터미널에 입출력할 수 있다.
+  - 한가지 주의할 점은 /dev/tty로의 출력은 표준 스트림을 거치지 않고 바로 터미널 장치에 쓰기 때문에 데이터를 가로채 리디렉션할 수 없다.
+  - tty 명령으로 현재 쉘의 tty 장치를 조회할 수 있고, stty 명령을 이용해 설정값을 변경할 수 있다.
+
+◎ reset 명령
+  - <code name="예시" type="shell">
+    sh$ <LF>reset<LF>   
+    # LF 문자는 CTRL-J를 사용한다.
+  - </code>
+  - 프로그램이 비정상 종료해 터미널 설정이 정상적으로 복구되지 않았을 경우, reset 명령을 이용해 초기화할 수 있다.
+  - rest 명령은 다음과 같은 역할을 한다.
+    - Set Cooked and Echo modes to on
+    - Turn off cbreak and Raw modes
+    - Turn on new-line translation
+    - Restore special characters to a sensible state.
+    - Any special character that is found to be NULL or -1 is reset to its default value.
+
+◎ 컨트롤 키
+  - 여기서 ^ 기호는 컨트롤 키를 의미한다.
+  - ^M: 엔터키에 해당
+  - ^C: 포어그라운드 작업에 SIGINT 신호를 보내 종료한다.
+  - ^D: EOF를 나타낸다. (master side에서 처리되는 것으로 시그널이 아니다.)
+  - ^\: 포어그라운드 작업에 SIGQUIT 신호를 보내 종료하고 core dump한다. (^C로 종료되지 않을 경우 사용할 수 있다.)
+  - ^S: 화면 출력 정지
+  - ^Q: 화면 출력 시작
+  - DEL or ^?: 마지막 문자 삭제
+  - ^U: 전체 명령행 삭제
+  - ^Z: 포어그라운드 작업에 SIGTSTOP 신호를 보내 suspend 시킨다.

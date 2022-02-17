@@ -1,0 +1,56 @@
+■ 프로세스 상태코드
+
+◎ 참조
+  - <link contents="Process State Codes" path="https://mug896.github.io/bash-shell/session_and_process-group.html"/>
+
+◎ 개요
+  - ps ax 명령을 실행하면 STAT 열에 현재 프로세스 상태를 나타내는 기호들이 표시된다. 상태 기호가 제일 앞에 오고 부가 기호가 뒤에 표시된다.
+
+◎ 상태 기호
+  - D: 방해 불가능한 sleep 상태 (보통 입출력 대기)
+  - I: 쉬고 있는 커널 스레드
+  - R: running이거나 가능한 상태 (run queue 위에 있는 경우 )
+  - S: 방해 가능한 sleep 상태 (이벤트 대기)
+  - T: 작업 관리 시그널이나 trace로 인한 stop 상태
+  - t: trace 디버깅으로 인한 stop 상태
+  - X: dead 상태
+  - Z: defunct(zombie) 상태. 종료됬지만 부모 프로세스가 확인하지 않은 경우이다.
+
+◎ 부가 기호 (BSD 포맷)
+  - <: 높은 우선순위
+  - N: 낮은 우선순위
+  - L: 메모리 locking
+  - s: session leader
+  - l: 멀티 스레드 상태
+  - +: 포어그라운드 프로세스 그룹 내
+
+◎ 프로세스 상태 변화 과정
+  - <img contents="프로세스 상태 변화 과정(R,D,S,T,Z)" path="./image/프로세스 상태 변화.png"/>
+
+◎ OS가 실행되는 방식
+  - <img contents="OS 실행 방식" path="./image/OS 실행 방식.png"/>
+  - OS가 실행되는 컨텍스트를 다음과 같이 분류할 수 있다.
+    - Interrupt context
+      - 하드웨어 인터럽트는 높은 우선순위를 가지며 현재 실행 중인 프로세스와 관계없이 즉시 처리된다.
+      - 인터럽트 핸들러는 빠른 시간 내에 처리해야 하므로 top half와 bottom half로 나누어 top half를 먼저 처리하고 시간이 걸리는 bottom half는 이후에 softirq, tasklet에서 처리하거나 kernel thread에 의해 처리된다. top half에서 실행될 때는 중복 실행되는 것을 방지하기 위해 모든 코어에서 해당 인터럽트가 비활성화되고 실행 중에 블록되는 일이 없다.
+      - 스케줄려는 프로세스가 직접 스케쥴 함수를 호출해 실행할 수도 있고(voluntary), time interrupt에 의해 실행될 수도 있다. (involuntary) 이때 인터럽트 핸들러가 특정 flag 값을 설정하면 커널 모드에서 유저 모드(process context)로 복귀 과정에서 확인되어 실행된다.
+    - Process context
+      - Process context는 프로세스이므로 스케쥴러에 의해 스케쥴링될 수 있다. 그러므로 실행 중에 sleep, block될 수 있고 preempted될 수도 있다.
+      - 프로그램이 실행되면서 발생하는 system call, exception이 처리되는 것이 여기에 속한다. 
+      - 시스템 콜은 원자적이라는 말이 있는데, 이는 실행 중간에 시그널에 의해 인터럽트됬다가 이어서 다시 실행되지 않는다는 뜻이다. 시스템 콜은 대기 상태에서 시그널을 받게 되면 EINTER 에러를 반환하고 종료하거나, 자동으로 다시 처음부터 시작한다.
+      - ps ax에서 프로세스 이름이 [ ]로 감싸진 프로세스는 커널 스레드에 해당한다. 커널 스레드는 일반 사용자 스레드와 동일하게 스케쥴되고 실행되는데, 차이점은 User 모드가 아닌 Kernel 모드에서 실행된다는 점이다.
+        - /proc/$PID/maps에서 프로세스의 메모리 매핑 정보를 볼 수 있는데 커널 스레드는 정보가 표시되지 않는다.
+    - Atomic context
+      - 분류를 process context와 atomic context로 하기도 한다. process context가 아니기 때문에 스케쥴러에 스케쥴되지 못하고, 여기서 실행 중에 sleep, block될 수 없고 mutext를 사용할 수도 없다. 또한 user space virtual address에도 접근할 수 없는데, page fault가 발생해 스케쥴링이 필요하게 되기 때문이다.
+
+◎ Local timer intterupts 실시간 조회
+  - 타이머의 종류
+    - Real Time Clock (RTC, hardware clock)
+    - Programmable Interval Timer (PIT)
+    - Local APIC timer (각 코어마다 가지고 있는 Time Stamp Counter(TSC) based timer)
+  - 컴퓨터에는 시계가 3가지 종류가 있다. 컴퓨터의 전원을 껏다가 나중에 다시 켜도 시간이 틀리지 않는 것은 보드에서 건전지로 유지되는 Real Time Clock(RTC)이 있기 때문이다. 하지만 프로그래밍에서 RTC는 자주 사용되지 않는다.
+  - Programmabel Interval Timer (PIT)는 프로그래밍에 사용되는 것으로 system timer(혹은 timer, system clock)이라고 한다. 이 칩에 의해서 주기적으로 인터럽트가 발생하고 커널이 필요한 작업을 하게 된다. 인터럽트가 발생하는 주기를 tick이라고 한다.
+  - 주기적인 tick을 이용할 때, tick 간격을 크게 하면 그 이하로 스케쥴링이 불가능하고, 작게 하면 tick 처리에 CPU 시간을 많이 소모하게 된다. 그래서 요즘에는 PIT을 이용한 주기적인 tick을 사용하지 않고(tickless) 각 CPU 코어마다 가지고 있는 Local APIC timer를 이용해 커널이 직접 다음 tick을 스케쥴링한다.(dynamic tick) 
+  - /proc/interrupts를 이용해 시스템의 하드웨어 인터럽트를 조회해볼 수 있다. 제일 왼쪽의 값은 인터럽트 번호인데, 제일 위의 0번이 PIT이다. 만약 PIT에 변동이 없고 0에 가까우면 그 커널은 PIT을 사용하지 않는 tickless kernel이다.
+  - 각 코어마다 가지고 있는 Local APIC timer의 인터럽트를 조회해볼 수 있다. PIT 인터럽트의 경우 global interrupt로 어떤 코어에나 전달할 수 있지만 Local APIC timer 인터럽트는 해당 코어에만 전달된다. 아래 명령을 실행했을 때 보이는 숫자는 interrupt가 처리된 횟수를 나타낸다. 각 코어별로 숫자가 표시되고 값이 증가하는 것을 볼 수 있다.
+  - Local APIC timer는 periodic, one-shot 모드에서 카운트할 때 CPU's external frequncy(bus frequency)가 사용되고, TSC-deadline 모드에서는 CPU's internal frequency가 사용된다. 나노초까지 컨트롤 가능한 hrtimer(high resolution) 타이머이다. PIT은 standard frequency(1,193,182Hz)로 정해져 있다.

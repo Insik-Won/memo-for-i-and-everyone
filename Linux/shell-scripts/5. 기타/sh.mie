@@ -1,0 +1,64 @@
+■ sh
+
+◎ 참조
+  - <link contents="sh" path="https://mug896.github.io/bash-shell/sh.html"/>
+
+◎ 개요
+  - Bash는 interactive shell이라면 sh는 script shell이라고 할 수 있을 정도로 sh는 bash에 비해 많은 기능이 빠져있고 스크립트 작성에 필요한 최소한의 기능만 가지고 있다. 
+  - sh는 bash에 비해 실행 파일의 크기가 작고 실행 속도도 빨라서, 빠른 start-up time을 요구하는 boot script를 작성하거나, 특정 프로그램에서 shell을 이용해 외부 명령을 실행시킬 때 sh가 선호된다.
+  - sh는 POSIX에서 규정한 명세로 sh의 구현체 중 하나가 dash(debian almquist shell)이다. sh는 POSIX 시스템이 기본적으로 포함되므로 각기 다른 쉘 환경을 가지는 여러 종류의 운영체제에서 호환성 문제 없이 실행할 수 있다. 그래서 배포용 스크립트를 작성할 때 주로 sh를 사용한다.
+  - 차이점
+    - sh로 작성한 스크립트를 실행할 때, bash에서 export한 변수는 사용할 수 있지만 함수를 사용할 수는 없다. (원본 명령 실행을 위해 command 명령을 사용할 필요가 없다.)
+    - sh는 스크립트를 작성하는 데 필요한 기본 기능만 제공한다. 그래서 [[ ]], (( )), let과 같은 bash에서 제공하는 특수 명령을 사용할 수 없다.
+    - bash에서만 제공하는 기능을 bashism이라고 한다.
+
+◎ echo
+  - sh의 echo 명령은 bash의 echo -e 명령과 같다. 기본적으로 이스케이프 처리를 한다.
+  - 이스케이프 문자가 처리되지 않게 하려면 printf "%s\n" ...를 사용하면 된다.
+  - sh의 echo와 printf문은 16진수 형식을 사용할 수 없다. 8진수 형식만 사용할 수 있다.
+
+◎ test
+  - sh의 test는 bash와 달리 문자열 동일 연산자가 '=='가 아니고 '='이다.
+
+◎ read
+  - -r 옵션만 사용가능하다.
+
+◎ 산술 확장
+  - 산술 확장은 sh에서도 사용가능하지만 다음 연산자는 사용할 수 없다.
+    - ++, -- 연산자
+    - , 연산자
+    - ** 연산자
+
+◎ 변수 확장
+  - sh에서 다음 변수확장 기능은 사용할 수 없다.
+    - 부분문자열 추출: ${parameter:offset:length}
+    - 부분문자열 교체: ${parameter/pattern/string}
+    - 간접참조: ${!parameter}
+    - 대소문자 변환: ${parameter^^}, ${parameter,,}
+
+◎ 리디렉션
+  - 1>&3-는 두 단계로 나누어야 한다: 1>&3, 3>&-
+  - command %> file은 command > file 2>&1로 변경해야 한다.
+  - command1 |& command2는 command 2>&1 | command2로 변경해야 한다.
+
+◎ 파일 지시자
+  - sh에서는 쉘에서 사용할 수 있는 파일 지시자 번호가 한자리수로 제한된다. 또한 이름있는 파일지시자 기능은 사용할 수 없다.
+
+◎ 기타
+  - 명령 히스토리 기능
+  - 함수는 export할 수 없다.
+
+◎ Bashism
+  - 이 내용은 bash에서만 사용할 수 있는 기능으로 sh에서는 사용할 수 없다.
+    - test 명령에서 '==' tkdyd
+    - += 메타문자
+    - $' ', $" "
+    - 배열
+    - [[ ]], (( )), for (( ... ))
+    - brace 확장과 프로세스 치환
+    - <<<
+    - function 키워드
+    - source, declare, disown, shopt 명령
+    - select문
+    - $LINENO, $PIPESTATUS, $RANDOM
+    

@@ -1,0 +1,54 @@
+■ interactive와 login shell
+
+◎ 참조
+  - <link contents="Interactive vs Non-Interactive Shell" path="https://mug896.github.io/bash-shell/interactive_non-interactive.html"/>
+
+◎ Interactive vs Non-Interactive
+  - 쉘이 실행되는 환경을 두가지로 나누어볼 수 있다. 사용자로부터 프롬프트를 통해 직접 명령을 입력받아 실행시키는 interactive shell, 작성한 스클비트 파일을 실행하는 것과 같은 non-interactive shell이다.
+  - non-interactive shell의 대표적인 예는 쉘 스크립트, bash -c command로 실행하는 명령이다.
+  - history 확장이나 alias, job control 등은 기본적으로 interactive shell에서 사용하기 위한 기능으로 non-interactive shell에서는 비활성화된다.
+  
+  - 스크립트 실행 시 다음 기능이 달라진다.
+    - 1. 별칭 기능이 비활성화
+      - 사용자마다 다른 alias 설정을 가지고 있기 떄문에 스크립트를 배포해 실행할 때 alias 적용이 된다면 오류가 발생할 수 있다.
+      - alias는 우선순위가 제일 높다.
+    - 2. 히스토리 확장 기능이 비활성화
+      - hisotry 확장은 interactive shell에서 사용하기 위한 기능이기 때문이다. history 내장명령도 사용할 수 없다.
+    - 3. 작업 관리 기능이 비활성화
+      - 작업 관리도 interactive shell에서 사용하기 위한 기능이기 때문이다. bg, fg, suspend 명령만 비활성화된다.
+    - 4. exec 명령이 실패하면 종료한다.
+      - 프롬프트에서는 exec 명령이 실패하면 에러 메세지와 함께 다음 프롬프트가 표시되지만, script 실행 시에는 바로 종료한다.
+    - 5. 시작 시 실행하는 파일이 다르다
+      - interactive shell를 시작할 때는 ~/.bashrc를 실행하고 non-interactive shell을 시작할 때는 BASH_ENV 변수에 설정된 파일을 실행한다.
+
+  - interactive shell인지 아닌지 다음 명령을 통해 알아볼 수 있다.
+    - <code type="shell">
+      # '$-' 변수는 set 명령에 의해 설정돼있는 option flags 을 담고 있으며 
+      # 'i' 는 interactive 를 의미합니다.
+      case $- in    
+          *i*) echo interactive shell ;;
+          *) echo non-interactive shell ;;
+      esac
+    - </code>
+
+◎ Login vs Non-Login
+  - 또 쉘이 실행되는 환경을 두가지로 나누어볼 수 있다. 원격으로 접속해 로그인 과정을 거쳐 사용하는 login shell과 윈도우 매니저에서 메뉴로 제공하는 터미널 프로그램을 실행시켜 사용하는 non-login shell이다.
+  - login shell인지 아닌지는 shopt -q loginshell; echo $?를 통해 알아볼 수 있다.
+
+  - Login Shell
+    - 시작 시 /etc/profile, ~/.bash_profile, ~/.bash_login, ~/.profile 순서로 파일을 읽어들여 실행한다. 보통 /etc/profile에서는 .(source 명령)을 이용해 /etc/bash.bashrc를 읽어들이고 ~/.profile에서는 ~/.bashrc를 읽어들인다. (bash --login -c와 같이 실행할 경우도 적용된다.)
+    - logout, exit 시에 ~/.bash_logout 파일을 실행한다.
+    - shopt -s huponexit 옵션 설정을 통해 logout 시에 background로 실행되는 job들에게 HUP 시그널을 보내 종료하게 할 수 있다.
+    - logout builtin 명령을 사용할 수 있다.
+    - 프롬프트 상에서 echo $0을 실행했을 때 -bash와 같이 첫 문자가 -이면 login shell을 나타낸다.
+
+  - Non-Login Shell
+    - 시작 시 /etc/bash.bashrc와 ~/.bashrc 파일을 실행한다.
+      - .rc 파일의 유래는, 1935년 MIT Compatible Time-Sharing System(CTSS)에는 하나의 파일에 여러 명령을 넣어놓고 실행하는 기능이 있었는데 'run commands'를 뜻하는 의미로 'runcom'이라 불렀고, 여기서 앞 글자를 따 .rc 파일이라고 한다.
+    - Non-login shell에서도 su - userid나 bash --login 명령을 통해 login shell을 만들 수 있다.
+
+  - Real user id vs Effective user id
+    - Real user id는 시스템에 로그인했을 때의 id를 말하며 $UID readonly 환경 변수에 저장된다. effective user id는 set uid 비트가 설정된 프로그램을 실행했을 때 변경되며, $EUID readonly 환경 변수에 저장된다. EUID는 명령을 실행할 때 실질적인 권한에 해당한다.
+  
+  - .bashrc.d 만들어 사용하기
+    - 쉘을 사용하다보면 자신이 만든 함수, 별칭, 자동완성이 쌓이게 되는데, 이럴 떄 ~/.bashrc.d 디렉토리를 만들어 한곳에서 관리하면 좋다. 이름 뒤에 .d를 붙인 것은 .bashrc에서 사용하는 파일들이 위치하는 디렉토리란 뜻이다.

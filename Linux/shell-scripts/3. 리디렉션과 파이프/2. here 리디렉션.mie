@@ -1,0 +1,26 @@
+■ here 리디렉션
+
+◎ 참조
+  - <link contents="<<, <<<" path="https://mug896.github.io/bash-shell/here_document.html"/>
+
+◎ <<, <<<
+  - << (here document), <<< (here string)은 stdin이나 특정 파일 지시자에 쉘 스크립트의 기능을 사용해 데이터를 입력할 수 있는 기능이다. <<는 여러 문자열을, <<<는 한 문자열을 사용할 수 있다.
+  - sh에서는 << 기능만 사용할 수 있다.
+
+◎ <<, here document
+  - <code name="예시">
+    command << LABEL
+    ...
+    LABEL
+  - </code>
+  - here document는 본문의 처음과 끝을 별도의 구분자(LABEL)로 구분한다. 이때 사용하는 구분자명은 임의로 만들어 사용할 수 있다. 
+  - 구분자를 따옴표로 감싸거나 이스케이프(\)하면 본문에서 변수확장, 명령치환 등이 일어나지 않는다.
+  - <<- 기호를 사용하면 입력할 떄 한 들여쓰기를 제거해서 출력할 수 있다.
+
+◎ <<<, here string
+  - command <<< string
+  - here string은 <<< 우측에 하나의 인수만 갖는다. 이때 이 인수는 변수확장, 명령치환 등의 기능을 사용할 수 있다.
+  - hrerstring은 마지막에 자동으로 개행 문자를 붙인다.
+
+◎ 추가
+  - <<, <<< 기호 앞에 파일 지시자 번호를 붙여 파일 지시자에 문서/문자열을 연결할 수 있다.

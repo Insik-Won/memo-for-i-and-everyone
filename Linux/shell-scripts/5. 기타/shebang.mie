@@ -1,0 +1,37 @@
+■ shebang
+
+◎ 참조
+  - <link contents="#!" path="https://mug896.github.io/bash-shell/shebang.html"/>
+
+◎ #!
+  - 스크립트 파일을 보다보면 첫번째 행에 #!로 시작하는 행을 본 적이 잇을 것이다. 이를 shebang이라고 부른다.
+  - shebang (또는 sharpbang,shabang,hashbang) 라인은 스크립트 파일의 첫줄에 위치해 스크립트가 어떤 명령으로 실행될 지를 지정한다.
+  - 프로그램의 절대경로나 현재 디렉토리를 기준으로 하는 상대경로를 사용할 수 있으며 변수는 사용할 수 없다.
+  - 그리고 shebang 라인에서 사용할 수 있는 옵션은 하나로 제한된다.
+
+  - 예시
+    - <code type="shell">
+      #! /bin/bash               # bash 스크립트 실행을 위한 shebang line
+      #! /bin/sed -f             # sed 스크립트 실행을 위한 shebang line
+      #! /usr/bin/awk -f         # awk 스크립트 실행을 위한 shebang line
+      #! /usr/bin/perl           # perl 스크립트 실행을 위한 shebang line
+      #! /usr/bin/python         # python 스크립트 실행을 위한 shebang line
+      #! /usr/bin/node           # node.js 스크립트 실행을 위한 shebang line
+      #! /usr/bin/make -f        # make 파일도 하나의 명령으로 실행할 수 있다.
+    - </code>
+
+  - shebang 문자는 텍스트 파일을 바이너리 실행파일처럼 실행할 수 있게 해주는 역할을 한다. OS가 실행 권한이 설정된 파일을 실행할 때 처음에 #! 문자를 만나면 뒤에 이어지는 나머지 라인을 해당 파일을 실행하기 위한 인터프리터로 취급한다. 
+  - shebang이 있는 파일을 실행하려면 당연하지만 실행권한을 주어야 한다. (chmod +x file)
+  - shebang 라인을 무시할려면 bash -m 옵션을 사용하면 된다.
+  - shebang 라인에 #!/usr/bin/env를 사용하는 경우를 본 적이 있을 것이다. env는 인자로 오는 인터프리터를 $PATH로 검색해 찾는 역할을 한다. 이를 사용하는 이유는 OS별로 프로그램의 위치가 다르기 때문에 호환성을 위해 사용하는 것이다. 또한 env의 -S 옵션을 사용하면 하나 밖에 사용할 수 없던 옵션을 여러개로 사용할 수 있다.
+  - 스크립트 파일은 set uid를 설정할 수 없다. 프로그램을 root 권한으로 실행하게 할 수도 있기 때문에 쉘 스크립트에 적용할 경우 보안과 관련해서 많은 문제가 생길 수 있다.
+
+◎ #!를 쓰지 않아도될 때
+  - 스크립트 파일을 직접 명령처럼 실행시킬 때 외에는 shebang line을 쓰지 않아도 된다.
+
+◎ # 문자를 사용하지 않는 쉬뱅
+  - ///bin/true; command_that_you_like
+  - 이 shebang은 #이 아닌 //를 주석을 사용하는 언어에 사용할 수 있다.
+  - 만약 실행 파일에 shebang 라인이 없을 경우, 그 내용이 쉘에 의해 실행된다.그리고 ///bin/true는 쉘에 의해 /bin/true 명령으로 인식이 되서 먼저 실행 후 command_that_you_like가 실행된다.
+  - 컴파일 언어의 경우, 스크립트 파일 자기참조는 $0을 통해 할 수 있다.
+

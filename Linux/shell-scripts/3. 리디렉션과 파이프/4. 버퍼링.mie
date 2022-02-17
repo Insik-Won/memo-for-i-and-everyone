@@ -1,0 +1,42 @@
+■ 버퍼링
+
+◎ 참조
+  - <link contents="Buffering" path="https://mug896.github.io/bash-shell/buffering.html"/>
+
+◎ 개요
+  - 입출력에 사용하는 read, write 시스템 콜은 기본적으로 버퍼를 사용하지 않는다. 그래서 데이터가 있을 때마다 read, write하기보다, 데이터를 메모리(버퍼)에 저장해두었다가 데이터를 읽고 쓰는 것을 하는 게 더 효율적이다.
+  - 데이터를 입력받고 연산결과를 출력하는 stream을 이용하는 명령은 내부적으로 버퍼를 이용한다. 그러나 버퍼링이 문제가 될 수도 있다. 데이터가 있는데도 버퍼가 찰 때까지 기다리는 경우가 있기 때문이다.
+
+◎ 버퍼링 모드
+  - 버퍼링 모드는 3가지로 구분할 수 있다.
+    - line buffered: newline을 만나면 출력한다
+    - full buffered: 버퍼가 차면 출력한다.
+    - unbuffered: 버퍼링을 하지 않고 바로 출력한다.
+  - 표준 스트림의 모드는 다음과 같다.
+    - stdin: 터미널과 연결돼있으면 line buffered/unbuffered이고 그 외는 full buffered이다.
+    - stdout: 터미널과 연결돼있으면 line buffered이고 그 외는 full buffered이다.
+    - stderr: 항상 unbuffered이다.
+
+◎ 버퍼링 관련 문제 해결
+  - 버퍼를 이용하는 대부분의 명령은 버퍼링으로 인해 발생할 수 있는 문제를 해결하기 위해 별도의 옵션이나 함수를 제공한다.
+    - tail: -f (read, write unbuffered)
+    - grep: --line-buffered (read는 full buffered)
+    - sed: -u, --unbuffered (write는 line buffered)
+    - tcpdump: -l
+    - gawk: fflush(), close()
+    - perl: flush(), close(), $|
+    - python: -u, flush(), close()
+    - java: flush(), close()
+  - 버퍼링과 관련된 옵션을 제공하지 않을 경우 gnu coreutils 명령인 stdbuf를 활용할 수 있다.
+
+◎ stdbuf
+  - stdbuf OPTION... COMMAND
+  - 옵션
+    - -i MODE, --input=MODE: stdin stream buffering 조정
+    - -o MODE, --input=MODE: stdout stream buffering 조정
+    - -e MODE, --error=MODE: stderr stream buffering 조정
+  - 모드
+    - L: line buffered (stdin에는 적용x)
+    - 0: unbuffered
+    - B: full buffered (기본 사이즈)
+    - size: full buffered (해당 size의 버퍼 크기, K,M,G 등의 접미사를 사용할 수 있다.)

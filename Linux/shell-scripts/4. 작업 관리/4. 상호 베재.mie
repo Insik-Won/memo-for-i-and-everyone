@@ -1,0 +1,23 @@
+■ 상호 베제
+
+◎ 참조
+  - <link contents="Mutual Exclusion" path="https://mug896.github.io/bash-shell/mutual_exclusion.html"/>
+  - <link contents="flock manpages" path="https://manpages.ubuntu.com/manpages/xenial/man1/flock.1.html"/>
+
+◎ 개요
+  - 쉘에서 스크립트를 작성할 때 동시성을 생각해야하는 경우는 많지 않으면 사용자가 여러개의 백그라운드 프로세스를 실행할 경우 문제가 생길 수도 있다.
+  - 동시성 문제를 다룰 때 대표적인 게 여러 프로세스에 의한 공유자원 접근인데, 쉘에서는 외부 파일을 생각해볼 수 있다.
+
+◎ flock 명령어
+  - flock [options] file|directory command [arguments]
+  - flock [options] file|directory -c command
+  - 파일이나 디렉토리를 lock으로 삼아 lock을 취득하고 명령어를 실행하고 lock을 반환한다. 만약 lock이 걸려있다면 풀릴 떄까지 대기한다.
+  - -n 옵션은 nonblock 옵션으로 다른 프로세스가 이미 lock을 가지고 있을 경우 대기하지 않고 바로 false를 반환한다.
+  - -o 옵션은 스크립트에서 하위 프로세스가 실행될 떄 lock을 가지는 걸 방지한다.
+
+  - flock [options] fd
+  - 파일 지시자를 lock으로 삼아 lock을 취득한다.
+    - -u 옵션은 lock을 반환한다.
+
+◎ /proc/locks
+  - 현재 시스템에서 사용중인 locks를 볼 수 있다. 이 정보를 이용하는 명령이 lslocks이다.

@@ -1,0 +1,122 @@
+■ usr
+
+◎ 참조
+  - <link contents="FHS usr" path="https://refspecs.linuxfoundation.org/FHS_3.0/fhs/ch04.html#purpose18"/>
+  - 이 글은 FHS의 usr 하위구조를 설명합니다.
+
+◎ 개요
+  - /usr은 파일구조에서 두번째로 중요한 구조이다. /usr은 공유가능하고 읽기전용이어야 한다. 그래서 사용자와 긴밀한 관련이 있거나 동적인 파일의 경우 다른 곳에 저장되어야 한다.
+
+◎ 조건
+  - /usr 구조는 다음 디렉토리나 심볼릭 링크를 가져야 한다.
+    - [
+      - bin: 대부분의 사용자 명령,
+      - lib: 라이브러리,
+      - local: local 하위 파일시스템 (설치 후 비어있음),
+      - sbin: 필수적이지 않은 시스템 이진 파일,
+      - share: 아키텍쳐 비의존적 데이터,
+    ]
+  - /usr 구조는 다음 선택 디렉토리나 심볼릭 링크를 가질 수도 있다.
+    - [
+      - game: 게임이나 교육용 프로그램,
+      - include: C 프로그램이 사용하는 헤더 파일,
+      - libexec: 프로그램이 사용하는 이진 실행 파일,
+      - lib<qual>: 대체 라이브러리 파일
+      - src: 소스 코드
+    ]
+    - 위 디렉토리는 시스템이 더이상 의존하지 않을 시 원한다면 삭제해도 된다.
+    - 위 디렉토리는 X Windows System이 사용하는 파일 구조였지만 널리 사용되기에 이 명세에 포함되었다.
+    - 위 디렉토리는 이전 시스템과 호환성을 위해 /var 디렉토리에 심볼릭 링크로 링크되어있을 수도 있다.
+      - /usr/spool -> /var/spool
+      - /usr/tmp -> /var/tmp
+      - /usr/spool/locks -> /var/locs
+
+◎ /usr/bin
+  - 설명: /usr/bin은 시스템의 실행가능한 명령이 있는 주요 디렉토리이다.
+  - 조건: /usr/bin은 다음 선택 명령을 가질 수도 있다.
+    - perl: PERL 인터프리터
+    - python: 파이썬 인터프리터
+    - tchsh: Tcl 인터프리터
+    - wish: Tcl/Tk 쉘
+    - expect: 반응형 대화상자 프로그램
+
+◎ /usr/include 
+  - 설명: /usr/include는 C 언어의 include 파일이 모두 모여있는 디렉토리이다.
+  - 조건: /usr/include는 다음 선택 디렉토리를 가질 수 있다.
+    - bsd: BSD 호환 include 파일
+
+◎ /usr/lib 
+  - 설명: /usr/lib은 object 파일과 라이브러리 파일을 담는 디렉토리이다. 그 중에는 사용자나 쉘 스크립트가 불러올 의도로 만들지 않은 내부 이진 파일도 있을 수 있다.
+    - 어플리케이션은 /usr/lib 디렉토리에 하위 디렉토리를 만들 수도 있다. 이 경우 어플리케이션이 사용하는 아키텍쳐 의존적인 데이터가 모두 들어가야 한다.
+  - 조건: 역사적인 이유로 /usr/lib/sendmail은 만약 sendmail 역할을 하는 명령이 다른 곳에 있다면 그 명령어의 심볼릭 링크가 되어야 한다.
+
+◎ /usr/libexec 
+  - 설명: /usr/libexec는 사용자나 쉘 스크립트가 불러올 의도로 만들지 않은 내부 이진 파일을 담는 디렉토리이다. 어플리케이션은 /usr/libexec 안에 하위 디렉토리를 하나 만들 수 있다.
+    - /usr/libexec를 사용하는 어플리케이션은 /usr/lib도 /usr/libexec와 똑같은 이유로 사용하진 말아야 한다.
+
+◎ /usr/lib<qual> 
+  - 설명: /usr/lib<qual>은 /usr/lib의 대체 버전이지만 sendmail이나 X11 심볼릭 링크는 담지 않아도 된다.
+
+◎ /usr/local 
+  - 설명: /usr/local은 관리자가 소프트웨어를 로컬로 설치하기 위해 만들어진 구조이다. 시스템 소프트웨어가 업데이트될 떄 덮어쓰기로부터 안전해야 하며 /usr에 없지만 여러 사용자가 공유하는 프로그램과 데이터가 들어갈 수 있다.
+    - 로컬로 설치하는 소프트웨어는 모두 /usr보다 /usr/local에 설치해야 한다.
+  - 조건: /usr/local은 다음 디렉토리를 가져야 한다.
+    - 디렉토리
+      - bin: 로컬 이진 실행 파일
+      - etc: 로컬 이진 실행 파일의 사용자 의존적인 시스템 설정
+      - game: 로컬 게임 파일
+      - include: 로컬 C 헤더 파일
+      - lib: 로컬 라이브러리
+      - man: 로컬 온라인 매뉴얼
+      - sbin: 로컬 시스템 이진 실행 파일
+      - share: 아키텍쳐 비의존적인 로컬 데이터를 담는 하위구조
+      - src: 로컬 소스코드
+    - /lib<qual>이나 /usr/lib<qual> 디렉토리는 /usr/local에도 꼭 존재해야 한다.
+    - /usr/local/etc는 /etc/local의 심볼릭 링크일 수 있다.
+    - /usr/share/color 디렉토리가 있다면 /usr/local/share/color도 꼭 존재해야하며 같은 규칙을 사용해야 한다.
+    - /usr/local/share은 /usr/share과 같은 조건을 가져야 한다.
+
+◎ /usr/sbin 
+  - 설명: /usr/sbin은 관리자가 사용하며 필수적이지 않은 이진 실행 파일을 담는 디렉토리이다. 시스템 수리, 복구, /usr 마운팅 등 필수적인 기능을 하는 시스템 관리 프로그램은 /sbin에 담겨야 한다.
+  - 조건: /usr/sbin은 디렉토리를 가지지 않아야 한다.
+
+◎ /usr/share 
+  - 설명: /usr/share는 모든 아키텍쳐 독립적인 읽기 전용 데이터 파일을 담는 구조이다.
+    - /usr/share는 해당 OS의 모든 아키텍쳐가 사용할 수 있는 데이터를 담을 의도로 만들어졌다.. 그러나 해당 OS의 다른 버전은 해당하지 않는다.
+    - 수정하지 않아도 되는 프로그램/패키지의 데이터는 /usr/share에 저장해야 한다. (로컬로 설치했다면 /usr/local/share에) /usr/share에 하위 디렉토리를 만들어 저장하거나 /usr/share/misc에 하나의 파일을 만들어 사용할 수 있다.
+    - /usr/share/games에 저장하는 게임 데이터는 순수하게 정적 데이터여야 한다. 만약 점수 파일이나 플레이 로그 같이 수정할 파일은 /var/games에 저장해야 한다.
+  - 조건: /usr/share는 다음 디렉토리를 가져야 하며 다음 조건 디렉토리를 가질 수도 있다.
+    - 디렉토리
+      - man: 온라인 매뉴얼
+      - misc: 기타 아키텍쳐 독립적 데이터
+        - ascii: 선택 디렉토리, ASCII 문자셋 테이블
+        - termcpa, termcap.db: 선택, Terminal capability 데이터베이스
+    - 선택 디렉토리
+      - color: ICC 색깔 관리 정보
+        - icc: 선택 디렉토리, ICC 색깔 프로필을 담는다.
+      - dict: 영단어 목록
+        - words: 선택 파일, 영단어 목록으로 look(1) 프로그램과 여러 맞춤법 프로그램에 사용된다. 미국이나 영국의 영문법을 따를 수 있다.
+          - 미국과 영국 영문법 둘다 검사해야 하는 곳일 경우 workds가 /usr/share/dict/american-english나 british-english로 링크되어 있을 수 있다.
+          - 다른 언어의 단어 리스트(/usr/share/dict/french,danish,etc)도 여기에 추가될 수 있다. 가능하다면 UTF-8을 따르는 것이 좋다.
+      - doc: 기타 문서
+      - games: /usr/games의 정적 데이터
+      - info: GNU Info 시스템의 기본 디렉토리
+      - locale: 로케일 정보
+      - nls: 원어 지원 관련 메세지 카탈로그
+      - ppd: PPD(Postscript Printer Definition) 파일을 담는 디렉토리
+      - sgml: SGML 데이터
+        - 선택 디렉토리
+          - dockbook: dockbook DTD
+          - tei: tei DTD
+          - html: html DTD
+          - mathml: mathml DTD
+      - terminfo: terminfo 데이터베이스의 디렉토리
+      - xml: XML 데이터
+        - 선택 디렉토리
+          - dockbook: dockbook XML DTD
+          - xhtml: XHTML DTD
+          - mathml: MathML DTD
+      - zoneinfo: 타임존 관련 정보와 설정
+
+◎ /usr/src 
+  - 설명: 참조 목적으로 가져온 소스코드만 둘 목적으로 만들어진 디렉토리이다.

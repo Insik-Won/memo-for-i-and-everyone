@@ -1,0 +1,53 @@
+■ linux spec
+
+◎ 참조
+  - <link contents="FHS Operating System Specific Annex" link="https://refspecs.linuxfoundation.org/FHS_3.0/fhs/ch06.html"/>
+  - 이 글은 FHS의 리눅스 전용 규칙을 설명합니다.
+
+◎ /
+  - 리눅스 시스템에서 커널을 root(/)에 둔다면 vmlinux나 vmlinuz 이름을 사용하는 것을 권장한다. 리눅스 커널 소스 패키지의 이름으로 사용되어왔기 때문이다.
+
+◎ /bin
+  - 리눅스 시스템은 /bin에 setserial 파일을 추가로 두어야 한다.
+
+◎ /dev
+  - 리눅스 시스템은 /dev에 다음 파일이 꼭 있어야 한다
+    - /dev/null: 해당 장치에 쓰인 모든 데이터는 사라진다. 해당 장치를 읽으면 EOF를 반환해야 한다.
+    - /dev/zero: 해당 장치에 쓰인 데이터는 모두 사라지며, 해당 장치를 읽으면 요청한 만큼의 크기만큼 데이터를 0으로 채워 반환해야 한다.
+    - /dev/tty: 현재 프로세스의 controlling terminal을 나타낸다. 
+
+◎ /etc
+  - 리눅스 시스템은 /etc에 lilo.conf 파일을 추가로 두어야 한다.
+
+◎ /proc
+  - /proc은 표준은 아니지만 실질적으로 표준으로 받아들여지는 리눅스 파일시스템으로, 프로세스와 시스템의 정보를 처리하는 디렉토리이다. 
+  - FHS는 이 디렉토리를 프로세스 정보를 저장하고 획득하는 용도로 사용하길 강력히 추천하는 입장이다.
+
+◎ /sbin
+  - 리눅스 시스템은 /sbin에 파일시스템 유지와 부트로더 관리에 쓰이는 명령을 이곳에 둔다.
+    - 정적 이진 파일: ldconfig, sln, ssync
+      - static ln(sln)과 static sync(ssync)는 뭔가 잘못됬을 떄 유용하다. sln의 용도는 이제 ldconfig(보통 /usr/sbin에 존재)로 넘어갔지만 동적 라이브러리를 업그레이드한 후 도와주는 역할로 톡톡한 구실을 한다. static sync(ssync) 또한 위급한 상황인 몇몇 경우에 유용하게 쓰인다.
+      - ldconfig는 선택 파일이며 부팅할 때마다 실행하는 정책을 기기가 선택할 수도 있다. ldconfig는 보통 다음과 같은 상황에 쓰인다.
+        - /lib/<file>을 삭제했을 경우
+        - 라이브러리 이름을 나열하고 싶을 때
+        - sln의 대용
+    - 기타 파일: ctrlatdel, kbdrate
+      - kbdrate는 키보드를 꾹 눌렀을 때 키 반복 속도가 너무 빠른 경우에 사용된다.
+      - ctrlaltdel은 강제 재부팅 키인 CTRL-ALT-DEL를 비활성화하기 위 해 쓰인다.
+
+◎ /sys
+  - /sys는 커널/시스템 정보 가상 파일시스템으로, 장치, 드라이버, 커널 기능이 표시되는 하위 구조이다.
+
+◎ /usr/include
+  - 아래 심볼릭 링크는 C/c++ 컴파일러가 설치되어있고 시스템이 glibc에 의존하지 않을 떄 필요하다.
+    - /usr/include/asm -> /usr/src/linux/include/asm-<arch>
+    - /usr/include/linux -> /usr/src/linux/include/linux
+
+◎ /usr/src
+  - 리눅스에서 특정 위치에 있어야 하는 소스코드는 리눅스 커널 소스코드이다. 이 코드는 /usr/src/linux에 들어가 있다.
+  - libc에 의존하는 리눅스 시스템에서 모든 리눅스 커널 소스코드가 없는데 C/c++ 컴파일러가 설치된 경우, 커널 코드의 include 파일은 반드시 아래 디렉토리에 위치해야 한다.
+    - /usr/src/linux/include/asm-<arch>
+    - /usr/src/linux/include/linux
+
+◎ /var/spool/cron
+  - /var/spool/cron 디렉토리는 cron과 at 프로그램이 사용하는 동적 데이터가 들어가는 곳이다.

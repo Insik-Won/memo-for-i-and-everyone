@@ -1,0 +1,78 @@
+■ Backend 로드맵
+
+◎ 참조
+  - <link contents="Backend Roadmap" path="https://roadmap.sh/backend"/>
+
+◎ 로드맵
+  - (*)가 붙은 것은 필수. 줄 앞에 (*)가 붙은 것은 전체가 필수, (X)가 붙은 것은 비추
+  ---
+  - 1. Internet (*)
+    - (*) How does the internet work?, What is HTTP?, Browsers and How they work?
+    - (*) DNS and how it works?, What is Domain Name?, What is Hosting?
+  - 2. Basic Frontend Knowledge (*)
+    - (*) HTML, CSS, JavaScript
+  - 3. OS and General Knowledge (*)
+    - (*) Terminal Usage, How OSs work in General, Process Management, Threads and Concurrency
+    - (*) Basic Terminal Commands: grep, awk, sed, lsof, curl, wget, tail, head, less, filnd, ssh, kill
+    - (*) Memory Management, Interprocess Communication, I/O Management, POSIX Basics (stdin, stdout, stderr, pipes), Basic Networking Concepts
+  - 4. Learn a Language
+    - Make sure to learn its quirks. Core dtails about runtime e.g. concurrency, memory model, etc.
+    - JavaScript(*), C#, Java, PHP, Rust, Go, Python, Ruby
+  - 5. Version Control Systems (What are they and why you should use one)
+    - Basic Usage of Git (*)
+    - Repo hosting services: GitHub(*), GitLab(X), Bitbucket(X)
+      - Create accound and Learn to use GitHub
+  - 6. Relational Databases
+    - PostgreSQL(*), MySQL, MariaDB, MS SQL, Oracle
+  - 7. More about Databases
+    - More about Databases
+      - (*) ORMs, ACID, Transactions, N+1 Problem, Databases Normalization, Indexes and how they work
+      - Data Replication, Sharding Strategies, CAP Theorem
+    - NoSQL Databases
+      - Document: MongoDB(*), Couch DB
+      - Colum: Cassandra(*)
+      - Time series: InfluxDB(*), TimescaleDB
+      - Realtime: Firebase(*), RethinkDB
+  - 8. Learn about APIS
+    - Authentication(*), HATEOAS, Open API Spec and Swagger
+    - REST(*), JSON APIs(*), gRPC(*), SOAP
+  - 9. Caching
+    - CDN(*), Client Side(*), Server Side: Redis(*), Memcahced
+  - 10. Web Security Knowledge
+    - (*) Hashing Algorithms: MD5 and why not use it, SHA Family, scrypt, bcrypt
+    - (*) HTTPS, Content Security Policy, CORS, SSL/TLS, OWASP Security Risks
+  - 11. Testing
+    - (*) Integration Testing, Unit Testing, Functional Testing
+  - 12. CI/CD(*)
+  - 13. Design and Development Principles
+    - (*) SOLID, KISS, YAGNI, DRY
+    - GOF Design Patterns, Domain Driven Design, Test Driven Development
+  - 14. Architectural Patterns
+    - Monolithic Apps(*), Microservices(*), SOA(*), Serverless(*), CQRS and Event Sourcing
+  - 15. Search Engines
+    - Elasticsearch(*), Solr
+  - 16. Message Brokers
+    - RabbitMQ(*), Kafka
+  - 17. Containerization vs Virtualization
+    - Docker(*), rkt(X), LXC(X)
+  - 18. GraphQL
+    - Apollo(*), Relay Modern
+  - 19. Graph Databases
+    - Neo4j
+  - 20. WebSockets
+  - 21. WebServers
+    - Nginx(*), Apache, Caddy, MS IIS
+  - 22: Building for Scale (*)
+    - Geral topics that you should learn and care about for the sustainability of the product
+    - Migtigation Strategies(*)
+      - Graceful, Degradation, Throttling, Backpressure, Loadshifting, Circuit Breaker
+    - Unstand the Diff
+      - Instrumentation, Monitoring, Telemetry
+    - Migration Startegies(*)
+    - Horizontal vs Vertical Scaling(*)
+    - Building with Observabiility in mind(*)
+      - Metrics logging other observable items that could help you in debugging and solving the issues when things go wrong
+  - 23. Keep Learning...
+
+◎ 이미지
+  - <img contents="image of Backend Roadmap" path="./files/backend.pdf"/>

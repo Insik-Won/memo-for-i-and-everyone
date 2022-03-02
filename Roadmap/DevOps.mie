@@ -1,0 +1,61 @@
+■ DevOps 로드맵
+
+◎ 참조
+  - <link contents="DevOps Roadmap" path="https://roadmap.sh/devops"/>
+
+◎ 로드맵
+  - (*)가 붙은 것은 필수. 줄 앞에 (*)가 붙은 것은 전체가 필수, (X)가 붙은 것은 비추
+  ---
+  - 0. Learn a Programming Language(*)
+    - Go(*), C, c++, Python, Rust, Ruby, Node.js
+    - It doesn't matter which language you pick, key is to get some programming knowledge for automation.
+  - 1. Understand different OS Concpets
+    - (*) Startup Management(initd), Service Management(systemd)
+    - (*) Process Management, Threads and Concurrency, Sockets, POSIX Basics, Networking Concepts
+    - (*) I/O Management, Virtualization, Memory/Storage, File Systems
+  - 2. Learning about Managing Servers
+    - Get some adminstration knowledge in some OS. Go with any Linux distro. Pick Ubuntu if you have a little no experience with Linux
+    - 2-1. Operating System
+      - Linux(*): Ubuntu(*), CentOS(*), RHEL(*), Fedora, Debian, SUSE Linux
+      - Unix: FreeBSD(*), OpenBSD, NetBSD
+      - Windows
+    - 2-2. Learn to live in Terminal
+      - (*) Learn Bash Scripting
+      - (*) Vim/Nano/Powershell/Emacs
+      - Compiling apps from source (gcc, make and other related stuff)
+      - (*) Text Manipulation: awk, sed, grep, sort, uniq, cat, cut, echo, fmt, tr, nl, egrep, fgrep, wc
+      - (*) Process Monitoring: ps, top, htop, atop, lsof
+      - (*) Network: nmap, tcpdump, ping, mtr, traceroute, dig, airmon, airodump, iptables, netstat
+      - (*) System Performance: nmon, iostat, sar, vmstat
+      - (*) Others: strace, dtrace, systemtap, uname, df, history
+  - 3. Networking, Security and Protocols(*)
+    - (*) HTTP, HTTPS, FTP, SSL/TLS, SSH, Port Forwarding
+    - Emails
+      - SMTP, IMAPS, POP3S
+      - DMARC, SPF, Domain Keys
+  - 4. What is and how to set up a ___
+    - (*) Reverse Proxy, Foward Proxy, Caching Server, Load Balancer, Firewall
+    - Web Server(*): Nginx(*), IIS, Apache, Tomcat, Caddy
+  - 5. Learn Infrastructure as Code (*)
+    - Containers(*): Docker(*), LXC
+    - Configuration Management(*): Ansible(*), Salt, Chef, Puppet
+    - Container Orchestration(*): Kubernetes(*), Mesos, Docker Swarm, Nomad
+    - Infrastructure Provisioning: Terraform(*), CloudFormation, Pulumi
+    - Service Mesh(*): Consul(*), Istio(*), Envoy, Linkerd
+  - 6. Learn some CI/CD Tool (*)
+    - Gitlab CI(*), GitHub Actions(*), Bamboo, Azure DevOps
+    - Jenkins(*), Circle CI(*), Travis CI, TeamCity
+  - 7. Learn how to monitor software and infrastructure (*)
+    - Infrastructure Monitoring(*): Prometheus(*), Grafana(*), Nagios, Zabbix, Monit, Datadog
+    - Application Monitoring(*): Jaeger(*), New Relic(*), AppDynamics, Instana, OpenTracing
+    - Logs Management: Elastick Stack(*), Graylog, Splunk, Papertrail
+  - 8. Cloud Providers (*)
+    - AWS(*), Google Cloud, Azure, Heroku, Alibaba Cloud(X)
+    - Digital Ocean(*), Linode, Vultr
+  - 9. Cloud Design Patterns (*)
+    - <link contents="cloud architecture patterns" path="http://bit.ly/cloud-arch-patterns"/>
+    - Availability, Data Management, Design and Implementation, Management and Monitoring
+  - 10. Keep Learning...
+
+◎ 이미지
+  - <img contents="image of Backend Roadmap" path="./files/devops.pdf"/>

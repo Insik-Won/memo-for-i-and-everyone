@@ -1,0 +1,78 @@
+■ DevOps 로드맵
+
+◎ 참조
+  - <link contents="DevOps Roadmap" path="https://roadmap.sh/frontend"/>
+
+◎ 로드맵
+  - (*)가 붙은 것은 필수. 줄 앞에 (*)가 붙은 것은 전체가 필수, (X)가 붙은 것은 비추
+  ---
+  - 1. Internet (*)
+    - (*) How does the internet work?, What is HTTP?, Browsers and How they work?
+    - (*) DNS and how it works?, What is Domain Name?, What is Hosting?
+  - 2. HTML, CSS, JavaScript 
+    - HTML: Learn the basics(*), Writing Semantic HTML, Forms and Validations(*), Conventions and Best Practies, Accesibility, SEO Basics
+    - CSS: Learn the basics(*), Responsive design and Media Queries, Making Layouts(*): Floats, Positioning, Display, Box Model, CSS Grid, Flex Box
+    - JavaScript: (*) Syntax and Basic Constructs, Learn DOM Manipulation, Learn Fetch API / Ajax(XHR), ES6+ and modular JavaScript, Understand the concepts Hoisting, Event Bublling, Scope, Prototype, Shadow DOM, strict
+  - 3. Version Control Systems (What are they and why you should use one)
+    - Basic Usage of Git (*)
+    - Repo hosting services: GitHub(*), GitLab(X), Bitbucket(X)
+      - Create accound and Learn to use GitHub
+  - 4. Web Security Knowledge (*)
+    - (*) HTTPS, Content Security Policy, CORS, OWASP Security Risks
+  - 5. Package Managers
+    - (*) npm, yarn
+    - npm and yarn both are fine, pick one or learn both, there is not much difference
+  - 6. CSS Architecture
+    - BEM, OOCSS(X), SMACSS(X)
+    - With modern frameworks and CSS-in-JS, you don't have to worry about these anymore but still it would be a good idea to get familarized with BEM at least.
+  - 7. CSS Preprocessors
+    - Sass, PostCSS, Less(X)
+    - With how the modern frameworks there has been more push towards CSS-in-JS so you may not need these but still a good idea to familarize yourself
+  - 8. Build Tools
+    - Task Runners: npm scripts(*)
+    - Module Bundlers: Weppack(*), esbuild(*), Rollup, Parcel, Vite
+    - Linters and Formatters: Prettier, ESLint, StandardJS(X)
+  - 9. Pick a Framework
+    - React(*): Redux(*), MobX, Recoil
+    - Angular: RxJS, NgRx
+    - Vue.js: VueX
+  - 10. Modern CSS
+    - Styled Components(*), CSS Modules(*), Styled JSX, Emotion
+  - 11. Web Components
+    - HTML Templates, Custom Elements, Shadow DOM
+  - 12 CSS Frameworks
+    - Bootstrap, Bulma
+      - CSS first frameworks which don't come with JavaScript framework components by default.
+    - Tailwind CSS, Chakra UI, Material UI, Radix UI
+      - JS based and better to use with your framework based JavaScript applications
+  - 13. Testing your Apps
+    - (*) Jest, react-testing-library, Cypress, Enzyme
+      - You can fill all your testing needs with just these
+    - (X) Mocha, Chai, Ava, Jasmine
+  - 14. Type Checkers
+    - TypeScript(*), Flow
+  - 15. Progressive Web Apps
+    - Storage, Web Sockets, Service Workers, Location, Notifications, Device Orientation, Payments, Credentials
+      - Learn different Web APIOS useds in PWAs
+    - PRPL Pattern, RAIL Model, Performance Metrics, Using Lighthouse, Using DevTools
+      - Calculating, Measuring, and improving performance
+  - 16. Server Side Rendering
+    - React(*); Next.js(*), After.js(X)
+    - Angualr: Universal
+    - Vue.js: Nuxt.js
+  - 17. GraphQL
+    - Apollo(*), Relay Modern
+  - 18. Static Site Generators
+    - Next.js(*), GatsbyJS(*), Nuxt.js, Vuepress, Jekyll, Hugo, Gridsome, Eleventy
+  - 19. Mobile Applications
+    - React Native(*), NativeScript, Flutter, Ionic
+  - 20. Desktop Applications
+    - Electron(*), Carlo(X), Proton Native(X)
+  - 21. Web Assembly
+    - Web Assemby or WASM is the binary instructions generated from higher level languages such as Go, C, C++, or Rust.
+    - It is faster than JavaScript and WASM 1.0 has already shipped in the major browsers.
+    - W3C accepted it as an official standard at the end of 2019. It will still take quite some time to go mainstream though.
+  - 22. Keep Learning...
+
+◎ 이미지
+  - <img contents="image of Backend Roadmap" path="./files/frontend.pdf"/>

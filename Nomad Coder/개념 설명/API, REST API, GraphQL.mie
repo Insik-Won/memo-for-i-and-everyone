@@ -1,0 +1,31 @@
+■ API, REST API, GraphQL
+
+◎ 참조
+  - <link contents="API 기초개념" path="https://youtu.be/iyFHfzCRHA8"/>
+  - <link contents="REST API 설계법" path="https://youtu.be/4DxHX95Lq2U"/>
+  - <link contents="REST API를 버리고 GraphQL을 선택한 이유" path="https://youtu.be/1imQ1_aOQvU"/>
+
+◎ 개요
+  - API는 코드들끼리 서로 소통하기 위해 만들어진 수단이다.
+  - API는 키보드처럼 각 행동마다 정해진 키가 존재한다. 로그인은 a키, 댓글 등록은 z키처럼 말이다.
+  - API는 종류가 REST API, GraphQL API 등으로 다양한데 모두 다르게 생긴 키보드이고, 같은 목적을 달성한다.
+  - 공공 데이터를 알려주는 API도 있고 날씨를 알려주는 API도 있고 페이스북 API, 인스타그램 API도 존재한다.
+  - API는 데이터/서버/프레임워크를 갖고 있는 사람이 원하는 대로 디자인할 수 있으며 그래서 접근권한이 제한될 수도, 제약이 있거나 사용비를 지불할 수도 있다.
+
+◎ REST API를 잘 설계하는 방법
+  - 1. URL에 동사를 사용하지 않는다.
+  - 2. HTTP Method (GET, POST, PUT, DELETE)를 동사처럼 사용한다.
+    - CRUD 관점에서 GET은 Read, POST는 Create, PUT은 Update, DELETE는 Delete에 해당한다.
+    - HTTP Method를 사용하면 하나의 URL이 여러 행동을 하도록 만들 수 있다.
+  - 3. URL을 중첩하는 기준은 해당 URL이 하위 URL의 정보를 포함하느냐이다.
+    - 예)
+      - 영화 목록 반환: GET movies/
+      - 특정 영화 반환: GET movies/inception
+      - 영화 랭킹 반환: GET topRatedMovies/
+      - 특정 영화 배우들 반환: GET movies/inception/actors
+  - 4. 상세한 정보는 요청 바디나 쿼리 파라미터를 사용한다.
+
+◎ REST API를 버리고 GraphQL을 선택한 이유 (니콜라스가)
+  - 1. REST API는 코드가 길고 오래 걸리는 반면, GraphQL은 코드가 적고 시간도 적게 걸린다. DB 사용도 선택이다.
+  - 2. GraphQL은 Apollo를 사용하면 데이터 전처리/후처리를 모두 알아서 해준다. 리액트와의 결합이 쉽다.
+  - 3. 리덕스를 대체할 수 있다. 앱의 데이터를 로컬로 관리할 수 있다.

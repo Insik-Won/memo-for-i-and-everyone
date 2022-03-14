@@ -61,7 +61,7 @@
 ◎ if 문
   - 구조
     - <code>
-      if test_command
+      if test_command;
         then command
       [ elif test_command; 
         then command ]
